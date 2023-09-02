@@ -2,8 +2,10 @@ package todo
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -60,4 +62,22 @@ func (l *List) Save(filename string) error {
 
 	//IOUTIL IS DEPRECATED
 	return ioutil.WriteFile(filename, json, 0644)
+}
+
+// Get method opens the provided file name, decodes
+// the JSON data and parses it into a List
+func (l *List) Get(filename string) error {
+	file, err := ioutil.ReadFile(filename)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+
+	if len(file) == 0 {
+		return nil
+	}
+
+	return json.Unmarshal(file, l)
 }
