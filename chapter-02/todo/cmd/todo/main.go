@@ -8,7 +8,10 @@ import (
 	"github.com/pleopleq/interacting/todo"
 )
 
-const todoFileName = ".todo.json"
+var (
+	binName      = "todo"
+	todoFileName = ".todo.json"
+)
 
 func main() {
 	task := flag.String("task", "", "Task to be included in the ToDo list")
@@ -26,11 +29,7 @@ func main() {
 
 	switch {
 	case *list:
-		for _, item := range *l {
-			if !item.Done {
-				fmt.Println(item.Task)
-			}
-		}
+		fmt.Print(l)
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -41,9 +40,10 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+
 	case *task != "":
 		l.Add(*task)
-
+		fmt.Print(*task)
 		if err := l.Save(todoFileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)

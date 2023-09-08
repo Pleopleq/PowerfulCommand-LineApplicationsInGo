@@ -18,6 +18,23 @@ type item struct {
 
 type List []item
 
+type Stringer interface {
+	String() string
+}
+
+func (l *List) String() string {
+	formatted := ""
+
+	for k, t := range *l {
+		prefix := "  "
+		if t.Done {
+			prefix = "X "
+		}
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+	}
+	return formatted
+}
+
 func (l *List) Add(task string) {
 	t := item{
 		Task:        task,
@@ -37,6 +54,8 @@ func (l *List) Complete(index int) error {
 	}
 	ls[index-1].Done = true
 	ls[index-1].CompletedAt = time.Now()
+
+	fmt.Print(l)
 
 	return nil
 }
