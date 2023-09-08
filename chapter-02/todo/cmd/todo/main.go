@@ -8,10 +8,7 @@ import (
 	"github.com/pleopleq/interacting/todo"
 )
 
-var (
-	binName      = "todo"
-	todoFileName = ".todo.json"
-)
+var todoFileName = ".todo.json"
 
 func main() {
 	task := flag.String("task", "", "Task to be included in the ToDo list")
