@@ -17,6 +17,10 @@ func main() {
 
 	flag.Parse()
 
+	if os.Getenv("TODO_FILENAME") != "" {
+		todoFileName = os.Getenv("TODO_FILENAME")
+	}
+
 	l := &todo.List{}
 
 	if err := l.Get(todoFileName); err != nil {
