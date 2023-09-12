@@ -22,7 +22,7 @@ type Stringer interface {
 	String() string
 }
 
-func (l *List) String() string {
+func (l *List) String(verbose bool) string {
 	formatted := ""
 
 	for k, t := range *l {
@@ -31,6 +31,10 @@ func (l *List) String() string {
 			prefix = "X "
 		}
 		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+
+		if verbose {
+			formatted += fmt.Sprintf(" - %s \n", t.CreatedAt.Format(time.RFC822))
+		}
 	}
 	return formatted
 }
@@ -55,7 +59,7 @@ func (l *List) Complete(index int) error {
 	ls[index-1].Done = true
 	ls[index-1].CompletedAt = time.Now()
 
-	fmt.Print(l)
+	fmt.Print(l.String(false))
 
 	return nil
 }
