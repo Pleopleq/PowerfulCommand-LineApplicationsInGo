@@ -1,6 +1,7 @@
 package main_test
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -85,6 +86,22 @@ func TestTodoCLI(t *testing.T) {
 
 		if expected != string(out) {
 			t.Errorf("Expected %q, got %q instead\n", expected, string(out))
+		}
+	})
+
+	t.Run("CompleteTask", func(t *testing.T) {
+		var buffer bytes.Buffer
+		cmd := exec.Command(cmdPath, "-complete", "1")
+
+		cmd.Stdout = &buffer
+		if err := cmd.Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		expected := fmt.Sprintf("X 1: %s\n  2: %s\n", task, task2)
+
+		if expected != string(buffer.String()) {
+			t.Errorf("Expected %q, got %q instead\n", expected, string(buffer.String()))
 		}
 	})
 }
