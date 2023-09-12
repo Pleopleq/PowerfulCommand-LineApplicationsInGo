@@ -18,6 +18,7 @@ func main() {
 	list := flag.Bool("list", false, "List all tasks")
 	complete := flag.Int("complete", 0, "Item to be completed")
 	delete := flag.Int("del", 0, "Item to be deleted")
+	verbose := flag.Bool("verbose", false, "Show information like date/time")
 
 	flag.Parse()
 
@@ -34,7 +35,7 @@ func main() {
 
 	switch {
 	case *list:
-		fmt.Print(l)
+		fmt.Print(l.String(false))
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -68,6 +69,8 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+	case *verbose:
+		fmt.Print(l.String(*verbose))
 	default:
 		fmt.Fprintln(os.Stderr, "Invalid option")
 		os.Exit(1)
