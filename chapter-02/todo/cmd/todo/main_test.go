@@ -104,4 +104,20 @@ func TestTodoCLI(t *testing.T) {
 			t.Errorf("Expected %q, got %q instead\n", expected, string(buffer.String()))
 		}
 	})
+
+	t.Run("NotCompleteTask", func(t *testing.T) {
+		var buffer bytes.Buffer
+		cmd := exec.Command(cmdPath, "-not-complete")
+
+		cmd.Stdout = &buffer
+		if err := cmd.Run(); err != nil {
+			t.Fatal(err)
+		}
+
+		expected := fmt.Sprintf("2: %s\n\n", task2)
+
+		if expected != string(buffer.String()) {
+			t.Errorf("Expected %q, got %q instead\n", expected, string(buffer.String()))
+		}
+	})
 }

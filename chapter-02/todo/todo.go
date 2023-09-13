@@ -104,3 +104,15 @@ func (l *List) Get(filename string) error {
 
 	return json.Unmarshal(file, l)
 }
+
+func (l *List) NotComplete() {
+	formatted := ""
+
+	for k, t := range *l {
+		if !t.Done {
+			formatted += fmt.Sprintf("%d: %s\n", k+1, t.Task)
+		}
+	}
+
+	fmt.Println(formatted)
+}

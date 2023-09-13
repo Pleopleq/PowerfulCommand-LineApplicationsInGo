@@ -19,6 +19,7 @@ func main() {
 	complete := flag.Int("complete", 0, "Item to be completed")
 	delete := flag.Int("del", 0, "Item to be deleted")
 	verbose := flag.Bool("verbose", false, "Show information like date/time")
+	notComplete := flag.Bool("not-complete", false, "List all the not completed tasks")
 
 	flag.Parse()
 
@@ -71,6 +72,8 @@ func main() {
 		}
 	case *verbose:
 		fmt.Print(l.String(*verbose))
+	case *notComplete:
+		l.NotComplete()
 	default:
 		fmt.Fprintln(os.Stderr, "Invalid option")
 		os.Exit(1)
