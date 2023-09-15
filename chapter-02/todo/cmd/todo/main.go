@@ -45,7 +45,7 @@ func main() {
 
 	switch {
 	case *list:
-		fmt.Print(l.String(false))
+		fmt.Print(l)
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -80,7 +80,7 @@ func main() {
 			os.Exit(1)
 		}
 	case *verbose:
-		fmt.Print(l.String(*verbose))
+		fmt.Print(l.TaskPrintFormatter(*verbose))
 	case *notComplete:
 		l.NotComplete()
 	default:
