@@ -18,11 +18,7 @@ type item struct {
 
 type List []item
 
-type Stringer interface {
-	String() string
-}
-
-func (l *List) String(verbose bool) string {
+func (l *List) TaskPrintFormatter(verbose bool) string {
 	formatted := ""
 
 	for k, t := range *l {
@@ -36,6 +32,12 @@ func (l *List) String(verbose bool) string {
 			formatted += fmt.Sprintf(" - %s \n", t.CreatedAt.Format(time.RFC822))
 		}
 	}
+
+	return formatted
+}
+
+func (l *List) String() string {
+	formatted := l.TaskPrintFormatter(false)
 	return formatted
 }
 
@@ -59,7 +61,7 @@ func (l *List) Complete(index int) error {
 	ls[index-1].Done = true
 	ls[index-1].CompletedAt = time.Now()
 
-	fmt.Print(l.String(false))
+	fmt.Print(l)
 
 	return nil
 }
