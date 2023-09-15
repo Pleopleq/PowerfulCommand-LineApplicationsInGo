@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	"github.com/pleopleq/interacting/todo"
 )
@@ -58,12 +57,14 @@ func main() {
 		}
 
 	case *add:
-		task, err := getTask(os.Stdin, flag.Args()...)
+		tasks, err := getTask(os.Stdin, flag.Args()...)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		l.Add(task)
+		for _, task := range tasks {
+			l.Add(task)
+		}
 
 		if err := l.Save(todoFileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -89,20 +90,25 @@ func main() {
 	}
 }
 
-func getTask(r io.Reader, args ...string) (string, error) {
-	if len(args) > 0 {
-		return strings.Join(args, " "), nil
-	}
+func getTask(r io.Reader, args ...string) ([]string, error) {
+	// if len(args) > 0 {
+	// 	return strings.Join(args, " "), nil
+	// }
 
 	s := bufio.NewScanner(r)
-	s.Scan()
-	if err := s.Err(); err != nil {
-		return "", err
+	var tasks []string
+
+	for s.Scan() {
+		if err := s.Err(); err != nil {
+			return []string{}, err
+		}
+
+		if len(s.Text()) == 0 {
+			return []string{}, fmt.Errorf("Task cannot be blank")
+		}
+
+		tasks = append(tasks, s.Text())
 	}
 
-	if len(s.Text()) == 0 {
-		return "", fmt.Errorf("Task cannot be blank")
-	}
-
-	return s.Text(), nil
+	return tasks, nil
 }
