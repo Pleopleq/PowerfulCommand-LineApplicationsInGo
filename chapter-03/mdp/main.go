@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 const (
@@ -37,4 +39,28 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+
+func run(filename string) error {
+	input, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		return err
+	}
+
+	htmlData := parseContent(input)
+
+	outName := fmt.Sprintf("%s.html", filepath.Base(filename))
+	fmt.Println(outName)
+
+	return saveHTML(outName, htmlData)
+}
+
+func parseContent(content []byte) string {
+	fmt.Println("TO BE DEFINED")
+	return ""
+}
+
+func saveHTML(out string, data string) error {
+	return nil
 }
